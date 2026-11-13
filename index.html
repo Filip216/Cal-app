@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#060b1d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Meals">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <title>Meal Tracker</title>
+  <script>
+    // Apply the saved theme before the page paints (no flash of the wrong theme).
+    (function () {
+      try {
+        var p = localStorage.getItem('mealTheme') || 'system';
+        var dark = p === 'dark' || (p === 'system' && window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+        var m = document.querySelector('meta[name=theme-color]');
+        if (m) m.setAttribute('content', dark ? '#060b1d' : '#eceff7');
+      } catch (e) { /* keep dark */ }
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Login / create profile (only shown when nobody is logged in) -->
+  <main id="auth" class="hidden"></main>
+
+  <!-- Main app -->
+  <div id="app" class="hidden">
+    <main id="view"></main>
+
+    <button class="fab hidden" id="fab" data-act="add-food" aria-label="Add food">
+      <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+
+    <nav class="tabbar" aria-label="Main">
+      <button class="tab" data-act="tab" data-tab="today">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+        <span>Today</span>
+      </button>
+      <button class="tab" data-act="tab" data-tab="foods">
+        <svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>
+        <span>Foods</span>
+      </button>
+      <button class="tab" data-act="tab" data-tab="profile">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/></svg>
+        <span>Profile</span>
+      </button>
+    </nav>
+  </div>
+
+  <div id="sheetRoot"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
